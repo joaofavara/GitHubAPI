@@ -18,7 +18,6 @@ module.exports = (slack, owner, auth, repositories) => {
                     slack(pullRequest);
                 };
             } catch (error) {
-                console.log('TESTE...');
                 console.log(error);
             }
         });
