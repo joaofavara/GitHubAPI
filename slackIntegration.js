@@ -1,27 +1,16 @@
 //https://stackoverflow.com/questions/53519541/node-js-slack-api-integration-error-an-api-error-occurred-channel-not-foun
 const { WebClient } = require('@slack/web-api');
 
-function formatDate(date) {
-    const formatedDate = new Date(date);
-    return `${formatedDate.getDate()}/${formatedDate.getMonth() + 1}/${formatedDate.getFullYear()}`;
-}
-
-// function formateAssignees(reviewers) {
-//     return reviewers.map();
-// }
-
 module.exports = (slackToken, slackChannel) => {
     const web = new WebClient(slackToken);
-    return module.exports = async(pullRequest) => {
-            console.log()
-            let prInformation = '';
-            let prRepo = '';
-            pullRequest.forEach((pr) => {
-                // console.log('review: ', review);
-                // if (pr.assignees.length < 2) {
-                    prRepo = pr.head.repo.name;
-                    prInformation = prInformation + `<${pr.html_url}|${pr.title}>\n\tAbertura do PR: ${formatDate(pr.created_at)}\n\tAssignees: ${pr.reviewes}\n\n\n`
-                // }
+    return module.exports = async(pullRequests) => {
+            let pullRequestData = '';
+            let pullRequestsRepositoryName = '';
+            pullRequests.forEach((pullRequest) => {
+                if (!pullRequest.isDraft) {
+                    pullRequestsRepositoryName = pullRequest.repositoryName;
+                    pullRequestData += `<${pullRequest.url}|${pullRequest.title}> (${pullRequest.whoOpened})\n\tAbertura do PR: ${pullRequest.createDate}\n\tAssignees: ${pullRequest.reviewers}\n\n\n`
+                }
             });
             
             const text = {
@@ -31,7 +20,7 @@ module.exports = (slackToken, slackChannel) => {
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": `*Repositorio ${prRepo} esta com Pull Requests abertos:*`
+                            "text": `*Repositorio ${pullRequestsRepositoryName} esta com Pull Requests abertos:*`
                         }
                     },
                     {
@@ -39,7 +28,7 @@ module.exports = (slackToken, slackChannel) => {
                         "block_id": "section567",
                         "text": {
                             "type": "mrkdwn",
-                            "text": `${prInformation}`,
+                            "text": `${pullRequestData}`,
                         },
                     },
                     
