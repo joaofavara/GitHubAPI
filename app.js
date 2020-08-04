@@ -8,7 +8,7 @@ const {
     slackChannel
 } = require('./config');
 const slack = require('./slackIntegration')(slackToken, slackChannel);
-const gitNotification = require('./apiGit')(slack, onwer, auth, repositories);
+const gitNotification = require('./apiGitHub')(slack, onwer, auth, repositories);
 
 schedule.scheduleJob(timer, function(){
     const date = new Date()
