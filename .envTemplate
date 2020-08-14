@@ -2,5 +2,4 @@ TIMER=* * * * * *
 REPOSITORIES= reposistories splited by coma (,)
 OWNER=
 AUTH_GITHUB=
-SLACK_TOKEN=
-SLACK_CHANNEL=
+SLACK_WEB_HOOK=

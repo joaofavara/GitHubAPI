@@ -5,6 +5,5 @@ module.exports = {
     repositories: credentions.REPOSITORIES,
     onwer: credentions.OWNER,
     auth: credentions.AUTH_GITHUB,
-    slackToken: credentions.SLACK_TOKEN,
-    slackChannel: credentions.SLACK_CHANNEL,
+    slackWebHook: credentions.SLACK_WEB_HOOK,
 }

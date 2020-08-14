@@ -1,9 +1,7 @@
-//https://stackoverflow.com/questions/53519541/node-js-slack-api-integration-error-an-api-error-occurred-channel-not-foun
-const { WebClient } = require('@slack/web-api');
+const fetch = require('node-fetch');
 
-module.exports = (slackToken, slackChannel) => {
-    const web = new WebClient(slackToken);
-    return module.exports = async(pullRequests) => {
+module.exports = (slackWebHook) => {
+    return module.exports = async (pullRequests) => {
             let pullRequestData = '';
             let pullRequestsRepositoryName = '';
             pullRequests.forEach((pullRequest) => {
@@ -14,7 +12,6 @@ module.exports = (slackToken, slackChannel) => {
             });
             
             const text = {
-                "channel": slackChannel,
                 "blocks": [
                     {
                         "type": "section",
@@ -35,6 +32,11 @@ module.exports = (slackToken, slackChannel) => {
                 ]
             };
 
-            await web.chat.postMessage(text);
+            await fetch(slackWebHook, {
+                method: 'POST',
+                body: JSON.stringify(text),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .catch(err => console.log(err));
         }
 }

@@ -4,14 +4,13 @@ const {
     repositories,
     onwer,
     auth,
-    slackToken,
-    slackChannel
+    slackWebHook
 } = require('./config');
-const slack = require('./slackIntegration')(slackToken, slackChannel);
+const slack = require('./slackIntegration')(slackWebHook);
 const gitNotification = require('./apiGitHub')(slack, onwer, auth, repositories);
 
 schedule.scheduleJob(timer, function(){
     const date = new Date()
-    console.log(`The answer to life, the universe, and everything! - ${date}`);
+    console.log(`Running time: ${date}`);
     gitNotification();
 });
