@@ -27,6 +27,7 @@ app.post('/github', (req, res, next) => {
 
     if (eventType) {
         const data = filterPullRequestInformation(result.pull_request, []);
+        console.log('data: ', data);
         slack(data);
     }
     return res.end();
