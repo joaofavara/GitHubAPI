@@ -20,6 +20,7 @@ schedule.scheduleJob(timer, function(){
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.post('/github', (req, res, next) => {
     const result = req.body;
@@ -40,6 +41,13 @@ app.post('/refresh', (req, res) => {
     const date = new Date()
     console.log(`Running time: ${date}`);
     gitNotification();
+    return res.status(200).end()
+})
+
+app.post('/mtp', (req, res) => {
+    const repositoryName = req.body['text'];
+    console.log('repositoryName: ', repositoryName);
+    // gitNotification();
     return res.status(200).end()
 })
 
