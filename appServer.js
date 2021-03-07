@@ -36,5 +36,12 @@ app.post('/github', (req, res, next) => {
     return res.end();
 })
 
+app.post('/refresh', (req, res) => {
+    const date = new Date()
+    console.log(`Running time: ${date}`);
+    gitNotification();
+    return res.status(200).end()
+})
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server is running in ${port}`));
