@@ -23,10 +23,11 @@ app.use(express.json());
 
 app.post('/github', (req, res, next) => {
     const result = req.body;
-    const eventType = req.header['X-GitHub-Event'] === 'pull_request';
+    const eventType = req.headers['x-github-event'] === 'pull_requests';
 
     if (eventType) {
         const data = filterPullRequestInformation(result.pull_request, []);
+        console.log('data: ', data);
         slack(data);
     }
     return res.end();
