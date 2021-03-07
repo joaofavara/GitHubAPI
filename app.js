@@ -2,12 +2,12 @@ const schedule = require('node-schedule');
 const {
     timer,
     repositories,
-    onwer,
+    owner,
     auth,
     slackWebHook
 } = require('./config');
 const slack = require('./slackIntegration')(slackWebHook);
-const gitNotification = require('./apiGitHub')(slack, onwer, auth, repositories);
+const gitNotification = require('./apiGitHub')(slack, owner, auth, repositories);
 
 schedule.scheduleJob(timer, function(){
     const date = new Date()

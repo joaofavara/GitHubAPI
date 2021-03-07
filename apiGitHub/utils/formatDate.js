@@ -1,4 +1,4 @@
 module.exports = (date) => {
-    const formatedDate = new Date(date);
-    return `${formatedDate.getDate()}/${formatedDate.getMonth() + 1}/${formatedDate.getFullYear()}`;
+    const formattedDate = new Date(date);
+    return `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
 };
