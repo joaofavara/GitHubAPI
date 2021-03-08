@@ -60,6 +60,7 @@ app.post('/mtp', async (req, res) => {
         repo: 'GitHubAPI',
         head: 'webhook',
         base: 'test',
+        title: 'MTP'
       });
 
     console.log('teste: ', teste);
