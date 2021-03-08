@@ -1,4 +1,6 @@
 const schedule = require('node-schedule');
+const { Octokit } = require("@octokit/rest");
+
 const {
     timer,
     repositories,
@@ -44,10 +46,23 @@ app.post('/refresh', (req, res) => {
     return res.status(200).end()
 })
 
-app.post('/mtp', (req, res) => {
+app.post('/mtp', async (req, res) => {
     const repositoryName = req.body['text'];
     console.log('repositoryName: ', repositoryName);
     // gitNotification();
+    const octokit = new Octokit({
+        auth,
+        baseUrl: 'https://api.github.com',
+    });
+
+    const teste = await octokit.pulls.create({
+        owner,
+        repo,
+        head: 'test',
+        base: 'webhook',
+      });
+
+    console.log('teste: ', teste);
     return res.status(200).end()
 })
 
