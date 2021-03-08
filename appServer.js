@@ -49,6 +49,8 @@ app.post('/refresh', (req, res) => {
 app.post('/mtp', async (req, res) => {
     const repositoryName = req.body['text'];
     console.log('repositoryName: ', repositoryName);
+    console.log('auth: ', auth);
+    console.log('owner: ', owner);
     // gitNotification();
     const octokit = new Octokit({
         auth,
@@ -59,7 +61,8 @@ app.post('/mtp', async (req, res) => {
         owner,
         repo: 'GitHubAPI',
         head: 'webhook',
-        base: 'test',
+        base: 'teste',
+        title: 'MTP'
       });
 
     console.log('teste: ', teste);
