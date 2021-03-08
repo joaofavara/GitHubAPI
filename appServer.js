@@ -12,6 +12,8 @@ const slack = require('./slackIntegration')(slackWebHook);
 const { filterPullRequestInformation } = require('./apiGitHub/utils');
 const gitNotification = require('./apiGitHub')(slack, owner, auth, repositories);
 const express = require('express');
+const slackPullRequestMTP = require('./slackIntegration/templates/slackPullRequestMTP');
+
 
 schedule.scheduleJob(timer, function(){
     const date = new Date()
@@ -47,22 +49,27 @@ app.post('/refresh', (req, res) => {
 })
 
 app.post('/mtp', async (req, res) => {
-    const repositoryName = req.body['text'];
-    console.log('repositoryName: ', repositoryName);
-    // gitNotification();
+    const parameters = req.body['text'].split(' ');
+    console.log('parameters: ', parameters);
+    const repo = parameters[0];
+    const head = parameters[1];
+    const base = parameters[2];
+
     const octokit = new Octokit({
         auth,
         baseUrl: 'https://api.github.com',
     });
 
-    const teste = await octokit.pulls.create({
+    const { data } = await octokit.pulls.create({
         owner,
-        repo: 'GitHubAPI',
-        head: 'webhook',
-        base: 'test',
+        repo,
+        head,
+        base,
+        title: 'MTP'
       });
 
-    console.log('teste: ', teste);
+    const message = slackPullRequestMTP(data.html_url, repo);
+    await slack(message);
     return res.status(200).end()
 })
 
