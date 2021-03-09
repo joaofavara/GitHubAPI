@@ -8,12 +8,13 @@ const {
     auth,
     slackWebHook
 } = require('./config');
-const slack = require('./slackIntegration')(slackWebHook);
+const slackSender = require('./slackIntegration')(slackWebHook);
 const { filterPullRequestInformation } = require('./apiGitHub/utils');
-const gitNotification = require('./apiGitHub')(slack, owner, auth, repositories);
+const gitNotification = require('./apiGitHub')(slackSender, owner, auth, repositories);
 const express = require('express');
 const slackPullRequestMTP = require('./slackIntegration/templates/slackPullRequestMTP');
 const slackPullRequestMessage = require('./slackIntegration/templates/slackPullRequestMessage');
+const slackRefresh = require('./slackIntegration/templates/slackRefresh');
 
 
 schedule.scheduleJob(timer, function(){
@@ -29,12 +30,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post('/github', (req, res, next) => {
     const result = req.body;
+    const isCreation = result.action !== 'closed';
     const eventType = req.headers['x-github-event'] === 'pull_request';
 
-    if (eventType) {
+    if (eventType && isCreation) {
         const data = filterPullRequestInformation(result.pull_request, []);
         const message = slackPullRequestMessage([data])
-        slack(message);
+        slackSender(message);
     }
     return res.end();
 })
@@ -42,6 +44,8 @@ app.post('/github', (req, res, next) => {
 app.post('/refresh', (req, res) => {
     const date = new Date()
     console.log(`Running time: ${date}`);
+    const message = slackRefresh();
+    slackSender(message);
     gitNotification();
     return res.status(200).end()
 })
@@ -67,7 +71,7 @@ app.post('/mtp', async (req, res) => {
       });
 
     const message = slackPullRequestMTP(data.html_url, repo);
-    await slack(message);
+    await slackSender(message);
     return res.status(200).end()
 })
 
