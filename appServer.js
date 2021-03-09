@@ -13,6 +13,7 @@ const { filterPullRequestInformation } = require('./apiGitHub/utils');
 const gitNotification = require('./apiGitHub')(slack, owner, auth, repositories);
 const express = require('express');
 const slackPullRequestMTP = require('./slackIntegration/templates/slackPullRequestMTP');
+const slackPullRequestMessage = require('./slackIntegration/templates/slackPullRequestMessage');
 
 
 schedule.scheduleJob(timer, function(){
@@ -29,14 +30,11 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/github', (req, res, next) => {
     const result = req.body;
     const eventType = req.headers['x-github-event'] === 'pull_request';
-    console.log('req.headers["X-GitHub-Event"]: ', req.headers['x-github-event']);
-    console.log('req.headers: ', req.headers);
-    console.log('eventType: ', eventType);
 
     if (eventType) {
         const data = filterPullRequestInformation(result.pull_request, []);
-        console.log('data: ', data);
-        slack([data]);
+        const message = slackPullRequestMessage([data])
+        slack(message);
     }
     return res.end();
 })

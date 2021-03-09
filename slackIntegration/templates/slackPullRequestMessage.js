@@ -1,10 +1,7 @@
 module.exports = (pullRequests) => {
     let pullRequestData = '';
     let pullRequestsRepositoryName = '';
-    // if (!pullRequest.isDraft) {
-    //     pullRequestsRepositoryName = pullRequest.repositoryName;
-    //     pullRequestData += `<${pullRequest.url}|${pullRequest.title}> (${pullRequest.whoOpened})\n\tAbertura do PR: ${pullRequest.createDate}\n\tAssignees: ${pullRequest.reviewers}\n\n\n`
-    // }
+
     pullRequests.forEach((pullRequest) => {
         if (!pullRequest.isDraft) {
             pullRequestsRepositoryName = pullRequest.repositoryName;
