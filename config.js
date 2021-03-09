@@ -1,9 +1,9 @@
-const credentions = require('dotenv').config().parsed;
+// const credentials = require('dotenv').config().parsed;
 
 module.exports = {
-    timer: credentions.TIMER,
-    repositories: credentions.REPOSITORIES,
-    onwer: credentions.OWNER,
-    auth: credentions.AUTH_GITHUB,
-    slackWebHook: credentions.SLACK_WEB_HOOK,
+    timer: process.env.TIMER,
+    repositories: process.env.REPOSITORIES,
+    owner: process.env.OWNER,
+    auth: process.env.AUTH_GITHUB,
+    slackWebHook: process.env.SLACK_WEB_HOOK,
 }
