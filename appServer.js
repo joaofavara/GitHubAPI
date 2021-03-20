@@ -78,12 +78,10 @@ app.post('/mtp', async (req, res) => {
     
         const message = slackPullRequestMTP(data.html_url, repo);
         await slackSender(message);
-        return res.status(200).end()
+        return res.status(200).end();
     } catch (err) {
-        // const message = slackPullRequestMTP(data.html_url, repo);
-        // await slackSender(message);
-        console.log(err.errors[0].message);
-        return res.status(400).statusMessage(err.errors[0].message)
+        console.log(err.errors[0]);
+        return res.send(`${err.message}\nTry again!\nOr call the support!`);
     }
 })
 
